@@ -2,6 +2,10 @@
 
 An end-to-end DevOps & DevSecOps project, built from scratch one phase at a time.
 
+# branch rule
+develop is the default branch 
+main is the production branch
+
 ## Roadmap
 
 - [x] Phase 1 — Git repository & foundations
