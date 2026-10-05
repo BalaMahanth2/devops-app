@@ -23,5 +23,8 @@ crash.log
 # Logs
 *.log
 
-`:
-q
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
