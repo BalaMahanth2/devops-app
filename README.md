@@ -9,7 +9,7 @@ main is the production branch
 ## Roadmap
 
 - [x] Phase 1 — Git repository & foundations
-- [ ] Phase 2 — Static web app running locally
+- [x] Phase 2 — Static web app running locally
 - [ ] Phase 3 — Database
 - [ ] Phase 4 — CI/CD with GitHub Actions
 - [ ] Phase 5 — Kubernetes (local)
