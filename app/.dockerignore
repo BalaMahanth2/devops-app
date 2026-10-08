@@ -1,0 +1,10 @@
+# deny everything by default
+*
+
+#Allow only the following files and directories
+!requirements.txt
+!src/
+
+# Re-exclude jun inside allowed paths
+**/__pycache__
+**/*.pyc
