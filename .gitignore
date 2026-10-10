@@ -28,3 +28,5 @@ crash.log
 __pycache__/
 *.pyc
 .pytest_cache/
+.ruff_cache/
+.ruff_cache/

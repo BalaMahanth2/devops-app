@@ -1,0 +1,7 @@
+# Dev and CI tooling. Regenerate the lock with:
+#   uv pip compile --universal requirements-dev.in -o requirements-dev.txt
+-r requirements.in
+-c requirements.txt
+pytest
+ruff
+uv
