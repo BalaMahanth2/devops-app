@@ -1,0 +1,5 @@
+# Direct runtime dependencies. Edit this file, then regenerate requirements.txt:
+#   uv pip compile --universal requirements.in -o requirements.txt
+flask
+gunicorn
+psycopg[binary]
