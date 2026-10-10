@@ -17,7 +17,7 @@ cd "$(dirname "$0")/.."
 # Docker needs a real host path. On Git Bash "pwd -W" gives the Windows form
 # (C:/...); on Linux that option does not exist, so plain "pwd" is used.
 ROOT="$(pwd -W 2>/dev/null || pwd)"
-SCAN_IMAGE="devops-app:scan"
+SCAN_IMAGE="${SCAN_IMAGE:-devops-app:scan}"
 
 trap 'rm -rf "$ROOT/.scan"' EXIT
 
@@ -52,7 +52,9 @@ scan_deps() {
 
 scan_image() {
   echo "==> Trivy: known vulnerabilities in the built image"
-  docker build --quiet -t "$SCAN_IMAGE" app
+  if [ -z "${SKIP_BUILD:-}" ]; then
+    docker build --quiet -t "$SCAN_IMAGE" app
+  fi
   mkdir -p .scan
   docker save "$SCAN_IMAGE" > .scan/image.tar
   trivy image --quiet --input /src/.scan/image.tar \
