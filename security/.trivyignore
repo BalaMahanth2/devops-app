@@ -1,0 +1,7 @@
+# Vulnerabilities we have reviewed and decided to accept, one ID per line.
+# Every entry needs a reason, the person who accepted it, and an expiry date.
+# When the date passes, Trivy reports the finding again and it must be re-reviewed.
+#
+# Example:
+#   # Not reachable: the app never parses untrusted YAML. Accepted by Mahanth.
+#   CVE-2099-0001 exp:2027-01-31
