@@ -14,6 +14,7 @@
       <dt>Version</dt><dd>{{ version }}</dd>
       <dt>Environment</dt><dd>{{ environment }}</dd>
       <dt>Served by</dt><dd>{{ hostname }}</dd>
+      <dt>Visits</dt><dd>{% if visits is not none %}{{ visits }}{% else %}unavailable{% endif %}</dd>
     </dl>
   </main>
 </body>
