@@ -3,4 +3,3 @@ CREATE TABLE visits (
     hostname    TEXT        NOT NULL,
     visited_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
--- sneaky edit
