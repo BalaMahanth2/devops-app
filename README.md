@@ -24,7 +24,7 @@ main is the production branch
 ## Run locally
 
 ~~~bash
-cp .env.example .env            # then set a real POSTGRES_PASSWORD
+cp -n .env.example .env            # then set a real POSTGRES_PASSWORD
 docker compose up -d --build
 curl http://localhost:8080/ready
 ~~~
