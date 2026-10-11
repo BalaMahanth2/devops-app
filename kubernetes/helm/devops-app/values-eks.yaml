@@ -1,0 +1,12 @@
+# Amazon EKS in a short-lived sandbox account.
+replicaCount: 1
+appEnv: eks
+
+service:
+  type: LoadBalancer
+
+database:
+  # The sandbox cluster has no storage driver, so the database keeps its data
+  # in the pod. It is lost when the pod restarts, which is fine for a 2-hour lab.
+  persistence:
+    enabled: false
