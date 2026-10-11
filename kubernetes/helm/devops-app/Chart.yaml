@@ -1,0 +1,8 @@
+apiVersion: v2
+name: devops-app
+description: Flask web app with a PostgreSQL database and Flyway migrations
+type: application
+# Version of the chart itself. Bump it when the templates change.
+version: 0.1.0
+# Informational only. The image that actually runs is set by image.tag in the values.
+appVersion: "0.1.0"
