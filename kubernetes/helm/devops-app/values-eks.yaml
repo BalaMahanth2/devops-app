@@ -3,7 +3,10 @@ replicaCount: 1
 appEnv: eks
 
 service:
-  type: LoadBalancer
+  # The sandbox deletes AWS load balancers, so the app is reached on a fixed
+  # port of the nodes. scripts/aws-up.sh opens that port in the firewall.
+  type: NodePort
+  nodePort: 30080
 
 database:
   # The sandbox cluster has no storage driver, so the database keeps its data
