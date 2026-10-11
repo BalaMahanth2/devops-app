@@ -1,0 +1,13 @@
+# Production. Used from Phase 6 onwards.
+replicaCount: 3
+appEnv: prod
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 192Mi
+  limits:
+    memory: 384Mi
+
+database:
+  storage: 10Gi

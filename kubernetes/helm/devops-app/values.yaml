@@ -1,0 +1,45 @@
+# Default values for every environment.
+# values-dev.yaml and values-prod.yaml override only what differs.
+
+replicaCount: 2
+
+image:
+  repository: ghcr.io/balamahanth2/devops-app
+  tag: sha-5ccdf4b
+
+# Shown on the web page as "Environment".
+appEnv: local
+
+service:
+  type: ClusterIP
+  port: 80
+  # Only used when type is NodePort.
+  nodePort: null
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+database:
+  image: postgres:18-alpine
+  # An existing Secret with the keys POSTGRES_DB, POSTGRES_USER and POSTGRES_PASSWORD.
+  # The chart never creates it, so no password ever lives in Git.
+  existingSecret: db-credentials
+  storage: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+migrate:
+  image: flyway/flyway:13-alpine
+  # An existing ConfigMap holding the SQL migration files.
+  existingConfigMap: migrations
+
+networkPolicy:
+  enabled: true

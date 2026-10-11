@@ -46,6 +46,9 @@ jobs:
       - name: Check for misconfigurations
         run: ./scripts/security-scan.sh config
 
+      - name: Lint and scan the Helm chart
+        run: ./scripts/security-scan.sh chart
+
   dependencies:
     name: Dependency scan
     runs-on: ubuntu-24.04

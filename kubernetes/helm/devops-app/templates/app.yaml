@@ -1,15 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops-app
-  namespace: devops-app
+  name: {{ include "devops-app.fullname" . }}
   labels:
-    app.kubernetes.io/name: devops-app
+    {{- include "devops-app.labels" . | nindent 4 }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: devops-app
+      {{- include "devops-app.selectorLabels" (dict "root" . "component" "web") | nindent 6 }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,7 +17,11 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: devops-app
+        {{- include "devops-app.selectorLabels" (dict "root" . "component" "web") | nindent 8 }}
+      annotations:
+        # Pods do not notice a changed ConfigMap. This hash changes when the
+        # config changes, which makes Kubernetes roll out new pods.
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -33,52 +36,50 @@ spec:
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app.kubernetes.io/name: devops-app
+              {{- include "devops-app.selectorLabels" (dict "root" . "component" "web") | nindent 14 }}
       containers:
         - name: app
-          image: ghcr.io/balamahanth2/devops-app:sha-739ee74
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - name: http
               containerPort: 8080
           envFrom:
             - configMapRef:
-                name: devops-app-config
+                name: {{ include "devops-app.fullname" . }}-config
           env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
+                  name: {{ .Values.database.existingSecret }}
                   key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
+                  name: {{ .Values.database.existingSecret }}
                   key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: db-credentials
+                  name: {{ .Values.database.existingSecret }}
                   key: POSTGRES_DB
             - name: DATABASE_URL
-              value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)
+              value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@{{ include "devops-app.fullname" . }}-db:5432/$(POSTGRES_DB)
           readinessProbe:
             httpGet:
               path: /ready
               port: http
+            initialDelaySeconds: 2
             periodSeconds: 5
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
               path: /health
               port: http
+            initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 3
           resources:
-            requests:
-              cpu: 50m
-              memory: 128Mi
-            limits:
-              memory: 256Mi
+            {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -94,16 +95,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: devops-app
-  namespace: devops-app
+  name: {{ include "devops-app.fullname" . }}
   labels:
-    app.kubernetes.io/name: devops-app
+    {{- include "devops-app.labels" . | nindent 4 }}
 spec:
-  type: NodePort
+  type: {{ .Values.service.type }}
   selector:
-    app.kubernetes.io/name: devops-app
+    {{- include "devops-app.selectorLabels" (dict "root" . "component" "web") | nindent 4 }}
   ports:
     - name: http
-      port: 80
+      port: {{ .Values.service.port }}
       targetPort: http
-      nodePort: 30080
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}

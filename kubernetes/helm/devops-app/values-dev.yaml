@@ -1,0 +1,7 @@
+# Local kind cluster.
+replicaCount: 3
+appEnv: dev
+
+service:
+  type: NodePort
+  nodePort: 30080
