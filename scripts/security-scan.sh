@@ -2,7 +2,7 @@
 # Runs the security scanners in pinned containers.
 # The same script runs on a laptop and in CI, so the results match.
 #
-# Usage: scripts/security-scan.sh [secrets|dockerfile|config|deps|image|chart|all]
+# Usage: scripts/security-scan.sh [secrets|dockerfile|config|deps|image|chart|terraform|all]
 set -euo pipefail
 
 # Git Bash on Windows rewrites arguments that look like Unix paths. Switch that off.
@@ -76,6 +76,13 @@ scan_chart() {
     && trivy config --quiet --severity HIGH,CRITICAL --exit-code 1 /src/kubernetes
 }
 
+scan_terraform() {
+  echo "==> Trivy: Terraform misconfigurations"
+  # .terraform holds downloaded providers, not our code.
+  trivy config --quiet --severity HIGH,CRITICAL --exit-code 1 \
+    --skip-dirs '**/.terraform' /src/terraform
+}
+
 case "${1:-all}" in
   secrets)    scan_secrets ;;
   dockerfile) scan_dockerfile ;;
@@ -83,9 +90,10 @@ case "${1:-all}" in
   deps)       scan_deps ;;
   image)      scan_image ;;
   chart)      scan_chart ;;
+  terraform)  scan_terraform ;;
   all)
     failed=""
-    for scan in secrets dockerfile config deps image chart; do
+    for scan in secrets dockerfile config deps image chart terraform; do
       "scan_$scan" || failed="$failed $scan"
     done
     if [ -n "$failed" ]; then
@@ -94,7 +102,7 @@ case "${1:-all}" in
     fi
     ;;
   *)
-    echo "Usage: $0 [secrets|dockerfile|config|deps|image|chart|all]" >&2
+    echo "Usage: $0 [secrets|dockerfile|config|deps|image|chart|terraform|all]" >&2
     exit 2
     ;;
 esac
