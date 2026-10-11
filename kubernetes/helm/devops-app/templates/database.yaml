@@ -77,6 +77,12 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
+        {{- if not .Values.database.persistence.enabled }}
+        # No disk: the data lives only as long as the pod does.
+        - name: data
+          emptyDir: {}
+        {{- end }}
+  {{- if .Values.database.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -85,3 +91,4 @@ spec:
         resources:
           requests:
             storage: {{ .Values.database.storage }}
+  {{- end }}

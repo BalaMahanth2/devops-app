@@ -28,6 +28,9 @@ database:
   # An existing Secret with the keys POSTGRES_DB, POSTGRES_USER and POSTGRES_PASSWORD.
   # The chart never creates it, so no password ever lives in Git.
   existingSecret: db-credentials
+  # Keep the data on a disk. Set to false where the cluster has no storage driver.
+  persistence:
+    enabled: true
   storage: 1Gi
   resources:
     requests:
