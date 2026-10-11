@@ -16,7 +16,7 @@ An end-to-end DevOps & DevSecOps project, built from scratch one phase at a time
 - [x] Phase 2 — Static web app running locally
 - [x] Phase 3 — Database
 - [x] Phase 4 — CI/CD with GitHub Actions
-- [ ] Phase 5 — Kubernetes (local)
+- [x] Phase 5 — Kubernetes (local)
 - [ ] Phase 6 — AWS: image in ECR, app on EKS
 - [ ] Phase 7 — Terraform for AWS + Ansible for VM config
 - [ ] Phase 8 — Local production environment
