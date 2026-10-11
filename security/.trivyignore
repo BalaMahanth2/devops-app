@@ -5,3 +5,18 @@
 # Example:
 #   # Not reachable: the app never parses untrusted YAML. Accepted by Mahanth.
 #   CVE-2099-0001 exp:2027-01-31
+
+# --- Terraform: EKS cluster in the short-lived sandbox account ---
+
+# The laptop reaches the cluster API over the internet; the sandbox gives no
+# private path into the network. Accepted by Mahanth. Revisit in Phase 11.
+AVD-AWS-0040 exp:2027-01-31
+
+# The laptop's public address changes every few minutes, and the sandbox does
+# not allow changing cluster settings after creation, so the allowed range
+# cannot be narrowed safely. Accepted by Mahanth. Revisit in Phase 11.
+AVD-AWS-0041 exp:2027-01-31
+
+# Encrypting Kubernetes secrets needs a KMS key, and the sandbox cannot delete
+# keys, so "terraform destroy" would fail. Accepted by Mahanth. Revisit in Phase 11.
+AVD-AWS-0039 exp:2027-01-31
