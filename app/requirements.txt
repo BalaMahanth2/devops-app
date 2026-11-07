@@ -17,11 +17,9 @@ markupsafe==3.0.4
     #   flask
     #   jinja2
     #   werkzeug
-psycopg==3.3.6
+psycopg[binary]==3.3.8
     # via -r requirements.in
-psycopg-binary==3.3.6 ; implementation_name != 'pypy'
-    # via psycopg
-tzdata==2026.5 ; sys_platform == 'win32'
+psycopg-binary==3.3.8
     # via psycopg
 werkzeug==3.1.9
     # via flask
